@@ -57,13 +57,12 @@
     position:relative; min-height:100vh; display:flex; align-items:center;
     padding-top:64px; overflow:hidden;
   }
-  #hero-canvas{position:absolute; inset:0; z-index:0; opacity:0.85;}
-  .hero-content{position:relative; z-index:2; max-width:640px;}
-  .hero-content::before{
-    content:''; position:absolute; left:-40px; right:-40px; top:-40px; bottom:-40px;
-    background:radial-gradient(ellipse at 30% 40%, rgba(10,14,23,0.55) 0%, rgba(10,14,23,0.0) 70%);
-    z-index:-1;
+  .hero .wrap{display:grid; grid-template-columns:1fr 320px; gap:48px; align-items:center;}
+  @media(max-width:900px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-visual{order:2; margin-top:8px;}
   }
+  .hero-content{position:relative; z-index:2; max-width:640px;}
   .eyebrow{
     font-family:'JetBrains Mono',monospace; color:var(--accent-teal); font-size:14px;
     display:flex; align-items:center; gap:10px; margin-bottom:20px;
@@ -92,6 +91,29 @@
   .social-row{display:flex; gap:20px; font-size:14px; color:var(--text-secondary);}
   .social-row a{display:flex; align-items:center; gap:6px; transition:color .15s;}
   .social-row a:hover{color:var(--accent-teal);}
+
+  .hero-visual{position:relative; display:flex; flex-direction:column; align-items:center; gap:16px;}
+  .elastic-illustration{width:100%; max-width:300px; height:auto; overflow:visible; cursor:grab; touch-action:none;}
+  .elastic-illustration.dragging{cursor:grabbing;}
+  .hero-visual-caption{color:var(--text-secondary); font-size:12.5px; text-align:center; line-height:1.65; max-width:250px;}
+  .hero-visual-caption b{color:var(--accent-teal); font-weight:600;}
+
+  .band-group{transform-box:fill-box; transform-origin:0% 50%;}
+  .figure{transform-box:fill-box; transform-origin:0% 50%;}
+  .packet{opacity:0;}
+
+  .json-popup{
+    position:absolute; top:-8px; left:50%; z-index:5;
+    background:var(--bg-elevated-2); border:1px solid var(--accent-teal); border-radius:8px;
+    padding:12px 16px; box-shadow:0 12px 30px rgba(0,0,0,0.45), 0 0 20px rgba(76,201,192,0.25);
+    opacity:0; pointer-events:none;
+    transform:translate(-50%,-14px) scale(0.9);
+    transition:opacity .22s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+  }
+  .json-popup.visible{opacity:1; transform:translate(-50%,-28px) scale(1);}
+  .json-popup pre{font-size:11.5px; line-height:1.7; color:var(--text-secondary); white-space:pre;}
+  .json-key{color:var(--accent-teal);}
+  .json-val{color:var(--accent-amber);}
 
   section{padding:110px 0;}
   @media(max-width:640px){section{padding:70px 0;}}
@@ -167,7 +189,6 @@
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
-    #hero-canvas{display:none;}
     .btn:hover, .project-card:hover{transform:none;}
   }
 </style>
@@ -188,7 +209,6 @@
 </nav>
 
 <section class="hero">
-  <canvas id="hero-canvas"></canvas>
   <div class="wrap">
     <div class="hero-content">
       <div class="eyebrow">AVAILABLE FOR NEW OPPORTUNITIES</div>
@@ -206,6 +226,45 @@
         <a href="mailto:harshadvele538@gmail.com">Email ↗</a>
         <a href="tel:+918237172969">+91 82371 72969</a>
       </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <svg class="elastic-illustration" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bandGradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#4CC9C0"/>
+            <stop offset="100%" stop-color="#E8A33D"/>
+          </linearGradient>
+        </defs>
+
+        <g class="anchor">
+          <rect x="18" y="86" width="34" height="48" rx="6" fill="#161d2e" stroke="#4CC9C0" stroke-width="2"/>
+          <line x1="24" y1="98" x2="46" y2="98" stroke="#4CC9C0" stroke-width="2"/>
+          <line x1="24" y1="108" x2="46" y2="108" stroke="#4CC9C0" stroke-width="2"/>
+          <line x1="24" y1="118" x2="46" y2="118" stroke="#E8A33D" stroke-width="2"/>
+        </g>
+
+        <g class="band-group">
+          <rect class="band" x="52" y="107" width="140" height="6" rx="3" fill="url(#bandGradient)"/>
+        </g>
+
+        <circle class="packet" cx="192" cy="110" r="5" fill="#E8A33D"/>
+
+        <g class="figure">
+          <circle cx="208" cy="88" r="12" fill="none" stroke="#E7ECF3" stroke-width="3"/>
+          <line x1="208" y1="100" x2="208" y2="138" stroke="#E7ECF3" stroke-width="3"/>
+          <line x1="208" y1="112" x2="196" y2="110" stroke="#E7ECF3" stroke-width="3"/>
+          <line x1="208" y1="112" x2="226" y2="98" stroke="#E7ECF3" stroke-width="3"/>
+          <line x1="208" y1="138" x2="194" y2="160" stroke="#E7ECF3" stroke-width="3"/>
+          <line x1="208" y1="138" x2="224" y2="158" stroke="#E7ECF3" stroke-width="3"/>
+        </g>
+      </svg>
+      <div class="json-popup mono" id="contact-json">
+        <pre>{
+  <span class="json-key">"email"</span>: <span class="json-val">"harshadvele538@gmail.com"</span>,
+  <span class="json-key">"phone"</span>: <span class="json-val">"+91 82371 72969"</span>
+}</pre>
+      </div>
+      <p class="hero-visual-caption mono">Drag the figure to <b>stretch</b> the line —<br>hold it at the limit to fetch the payload.</p>
     </div>
   </div>
 </section>
@@ -390,94 +449,9 @@
   </div>
 </section>
 
-<footer>© 2026 Harshad Vele. Built with three.js.</footer>
+<footer>© 2026 Harshad Vele.</footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-(function(){
-  var canvas = document.getElementById('hero-canvas');
-  var hero = document.querySelector('.hero');
-  if(!canvas || typeof THREE === 'undefined') return;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduceMotion) return;
-
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(60, hero.clientWidth/hero.clientHeight, 0.1, 1000);
-  camera.position.set(0,0,32);
-
-  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(hero.clientWidth, hero.clientHeight);
-
-  var group = new THREE.Group();
-  scene.add(group);
-
-  var isMobile = window.innerWidth < 700;
-  var NODE_COUNT = isMobile ? 16 : 30;
-  var nodes = [];
-  var nodeGeo = new THREE.SphereGeometry(0.35, 12, 12);
-  var nodeMatTeal = new THREE.MeshBasicMaterial({color:0x4CC9C0});
-  var nodeMatAmber = new THREE.MeshBasicMaterial({color:0xE8A33D});
-
-  for(var i=0;i<NODE_COUNT;i++){
-    var mat = Math.random() > 0.8 ? nodeMatAmber : nodeMatTeal;
-    var mesh = new THREE.Mesh(nodeGeo, mat);
-    var radius = 14;
-    var theta = Math.random()*Math.PI*2;
-    var phi = Math.acos((Math.random()*2)-1);
-    mesh.position.set(
-      radius * Math.sin(phi) * Math.cos(theta) * (0.5+Math.random()*0.5),
-      radius * Math.sin(phi) * Math.sin(theta) * (0.5+Math.random()*0.5),
-      radius * Math.cos(phi) * (0.5+Math.random()*0.5)
-    );
-    group.add(mesh);
-    nodes.push(mesh);
-  }
-
-  var lineMat = new THREE.LineBasicMaterial({color:0x2c6e68, transparent:true, opacity:0.35});
-  var pulseLines = [];
-  for(var i=0;i<nodes.length;i++){
-    for(var j=i+1;j<nodes.length;j++){
-      var d = nodes[i].position.distanceTo(nodes[j].position);
-      if(d < 11 && Math.random() > 0.55){
-        var geo = new THREE.BufferGeometry().setFromPoints([nodes[i].position, nodes[j].position]);
-        var line = new THREE.Line(geo, lineMat.clone());
-        group.add(line);
-        pulseLines.push({line:line, phase:Math.random()*Math.PI*2});
-      }
-    }
-  }
-
-  var mouseX = 0, mouseY = 0;
-  window.addEventListener('mousemove', function(e){
-    mouseX = (e.clientX / window.innerWidth - 0.5);
-    mouseY = (e.clientY / window.innerHeight - 0.5);
-  });
-
-  function onResize(){
-    camera.aspect = hero.clientWidth/hero.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(hero.clientWidth, hero.clientHeight);
-  }
-  window.addEventListener('resize', onResize);
-
-  var clock = new THREE.Clock();
-  function animate(){
-    requestAnimationFrame(animate);
-    var t = clock.getElapsedTime();
-    group.rotation.y = t * 0.06 + mouseX * 0.3;
-    group.rotation.x = mouseY * 0.15;
-
-    pulseLines.forEach(function(pl){
-      var pulse = (Math.sin(t*1.2 + pl.phase) + 1) / 2;
-      pl.line.material.opacity = 0.15 + pulse * 0.45;
-    });
-
-    renderer.render(scene, camera);
-  }
-  animate();
-})();
-
 (function(){
   var cards = document.querySelectorAll('.project-card');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -493,6 +467,97 @@
       card.style.transform = 'rotateY(0) rotateX(0) translateZ(0)';
     });
   });
+})();
+
+(function(){
+  var illustration = document.querySelector('.elastic-illustration');
+  var bandGroup = document.querySelector('.band-group');
+  var figure = document.querySelector('.figure');
+  var packet = document.querySelector('.packet');
+  var popup = document.getElementById('contact-json');
+  if(!illustration || !bandGroup || !figure || !packet || !popup) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MAX_STRETCH = 196;
+  var VIEWBOX_WIDTH = 320;
+  var REVEAL_THRESHOLD = 0.92;
+
+  var dragging = false;
+  var startClientX = 0;
+  var currentT = 0;
+  var revealed = false;
+
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+  function applyStretch(t){
+    currentT = t;
+    var scaleX = 1 + t * 1.35;
+    bandGroup.style.transform = 'scaleX(' + scaleX + ')';
+    figure.style.transform = 'translateX(' + (t * MAX_STRETCH) + 'px)';
+
+    var shouldReveal = t >= REVEAL_THRESHOLD;
+    if(shouldReveal && !revealed){
+      revealed = true;
+      popup.classList.add('visible');
+    } else if(!shouldReveal && revealed){
+      revealed = false;
+      popup.classList.remove('visible');
+    }
+  }
+
+  function pointFromEvent(e){
+    var rect = illustration.getBoundingClientRect();
+    return e.clientX * (VIEWBOX_WIDTH / rect.width);
+  }
+
+  function onPointerDown(e){
+    dragging = true;
+    illustration.classList.add('dragging');
+    bandGroup.style.transition = 'none';
+    figure.style.transition = 'none';
+    startClientX = pointFromEvent(e) - currentT * MAX_STRETCH;
+    if(illustration.setPointerCapture){
+      try{ illustration.setPointerCapture(e.pointerId); }catch(err){}
+    }
+    e.preventDefault();
+  }
+
+  function onPointerMove(e){
+    if(!dragging) return;
+    var delta = pointFromEvent(e) - startClientX;
+    applyStretch(clamp(delta / MAX_STRETCH, 0, 1));
+  }
+
+  function onPointerUp(){
+    if(!dragging) return;
+    dragging = false;
+    illustration.classList.remove('dragging');
+
+    var releasedT = currentT;
+    var ease = reduceMotion ? 'transform .2s ease' : 'transform .3s cubic-bezier(.34,1.56,.64,1)';
+    bandGroup.style.transition = ease;
+    figure.style.transition = ease;
+    applyStretch(0);
+
+    if(releasedT > 0.12 && !reduceMotion){
+      var startX = releasedT * MAX_STRETCH;
+      packet.style.transition = 'none';
+      packet.style.transform = 'translateX(' + startX + 'px)';
+      packet.style.opacity = '1';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          packet.style.transition = 'transform .3s ease-in, opacity .3s ease-in .12s';
+          packet.style.transform = 'translateX(0)';
+          packet.style.opacity = '0';
+        });
+      });
+    }
+  }
+
+  illustration.addEventListener('pointerdown', onPointerDown);
+  illustration.addEventListener('pointermove', onPointerMove);
+  illustration.addEventListener('pointerup', onPointerUp);
+  illustration.addEventListener('pointercancel', onPointerUp);
 })();
 </script>
 

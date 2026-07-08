@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harshad Vele — Senior Java Backend Developer</title>
+<meta name="description" content="Harshad Vele — Senior Java Backend Developer. Microservices, Spring Boot, Kafka, banking & enterprise platforms.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E17;
+    --bg-elevated:#121826;
+    --bg-elevated-2:#161d2e;
+    --text-primary:#E7ECF3;
+    --text-secondary:#8B96AB;
+    --accent-teal:#4CC9C0;
+    --accent-teal-dim:rgba(76,201,192,0.15);
+    --accent-amber:#E8A33D;
+    --amber-dim:rgba(232,163,61,0.15);
+    --border:#212A3D;
+    --radius:10px;
+    --max-w:1080px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text-primary);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; letter-spacing:-0.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit; text-decoration:none;}
+  ::selection{background:var(--accent-teal); color:#06110f;}
+  :focus-visible{outline:2px solid var(--accent-teal); outline-offset:3px; border-radius:4px;}
+
+  .wrap{max-width:var(--max-w); margin:0 auto; padding:0 28px;}
+
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter:blur(10px); background:rgba(10,14,23,0.7);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .logo{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-teal); box-shadow:0 0 12px var(--accent-teal);}
+  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--text-secondary);}
+  .navlinks a:hover{color:var(--accent-teal);}
+  @media(max-width:640px){.navlinks{display:none;}}
+
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:center;
+    padding-top:64px; overflow:hidden;
+  }
+  #hero-canvas{position:absolute; inset:0; z-index:0; opacity:0.85;}
+  .hero-content{position:relative; z-index:2; max-width:640px;}
+  .hero-content::before{
+    content:''; position:absolute; left:-40px; right:-40px; top:-40px; bottom:-40px;
+    background:radial-gradient(ellipse at 30% 40%, rgba(10,14,23,0.55) 0%, rgba(10,14,23,0.0) 70%);
+    z-index:-1;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; color:var(--accent-teal); font-size:14px;
+    display:flex; align-items:center; gap:10px; margin-bottom:20px;
+  }
+  .eyebrow::before{content:''; width:24px; height:1px; background:var(--accent-teal);}
+  .hero h1{
+    font-size:clamp(38px,6vw,64px); font-weight:700; line-height:1.05; margin-bottom:18px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 6px 24px rgba(76,201,192,0.12);
+  }
+  .hero .role{
+    font-size:clamp(18px,2.4vw,22px); color:var(--accent-amber); font-weight:600; margin-bottom:20px;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .hero p{color:var(--text-secondary); font-size:16px; max-width:520px; margin-bottom:32px;}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px;}
+  .btn{
+    padding:13px 24px; border-radius:8px; font-weight:600; font-size:14px;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .15s ease, box-shadow .15s ease;
+    border:1px solid transparent; cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--accent-teal); color:#06110f;}
+  .btn-primary:hover{box-shadow:0 8px 24px rgba(76,201,192,0.35);}
+  .btn-ghost{border-color:var(--border); color:var(--text-primary); background:rgba(255,255,255,0.02);}
+  .btn-ghost:hover{border-color:var(--accent-teal); color:var(--accent-teal);}
+  .social-row{display:flex; gap:20px; font-size:14px; color:var(--text-secondary);}
+  .social-row a{display:flex; align-items:center; gap:6px; transition:color .15s;}
+  .social-row a:hover{color:var(--accent-teal);}
+
+  section{padding:110px 0;}
+  @media(max-width:640px){section{padding:70px 0;}}
+  .section-label{
+    font-family:'JetBrains Mono',monospace; color:var(--accent-teal); font-size:13px;
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px; display:block;
+  }
+  .section-title{font-size:clamp(26px,3.4vw,34px); font-weight:700; margin-bottom:44px;}
+
+  .about-grid{display:grid; grid-template-columns:1.4fr 1fr; gap:60px; align-items:start;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid p{color:var(--text-secondary); margin-bottom:16px; font-size:15.5px;}
+  .about-grid strong{color:var(--text-primary); font-weight:600;}
+  .facts{display:flex; flex-direction:column; gap:16px; border-left:1px solid var(--border); padding-left:24px;}
+  .fact{font-size:14px; color:var(--text-secondary);}
+  .fact b{color:var(--text-primary); display:block; font-size:15px; margin-bottom:2px; font-family:'Space Grotesk',sans-serif;}
+
+  .timeline{position:relative; padding-left:32px; border-left:1px solid var(--border);}
+  .tl-item{position:relative; padding-bottom:56px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:-37px; top:4px; width:12px; height:12px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--accent-teal); box-shadow:0 0 0 4px var(--bg), 0 0 14px rgba(76,201,192,0.4);
+  }
+  .tl-role{font-size:19px; font-weight:600; font-family:'Space Grotesk',sans-serif;}
+  .tl-meta{color:var(--accent-amber); font-size:14px; margin:4px 0 14px; font-family:'JetBrains Mono',monospace;}
+  .tl-item ul{padding-left:18px; color:var(--text-secondary); font-size:15px;}
+  .tl-item li{margin-bottom:8px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace; font-size:12px; padding:4px 10px; border-radius:99px;
+    background:var(--accent-teal-dim); color:var(--accent-teal); border:1px solid rgba(76,201,192,0.25);
+  }
+
+  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:24px; perspective:1000px;}
+  .project-card{
+    background:linear-gradient(160deg, var(--bg-elevated), var(--bg-elevated-2));
+    border:1px solid var(--border); border-radius:var(--radius); padding:28px;
+    transform-style:preserve-3d; transition:transform .1s ease, border-color .2s ease, box-shadow .2s ease;
+    will-change:transform;
+  }
+  .project-card:hover{border-color:rgba(76,201,192,0.35); box-shadow:0 20px 40px rgba(0,0,0,0.35);}
+  .project-num{font-family:'JetBrains Mono',monospace; color:var(--accent-amber); font-size:13px; margin-bottom:10px;}
+  .project-card h3{font-size:19px; margin-bottom:12px;}
+  .project-card .block{margin-bottom:12px; font-size:14px;}
+  .project-card .block b{color:var(--accent-teal); font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:4px;}
+  .project-card .block span{color:var(--text-secondary);}
+  .project-card .tag-row{margin-top:16px;}
+
+  .skills-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+  @media(max-width:700px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-group{border:1px solid var(--border); border-radius:var(--radius); padding:22px; background:var(--bg-elevated);}
+  .skill-group h4{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent-amber); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font-size:13px; padding:6px 12px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text-secondary);}
+
+  .ach-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;}
+  .ach-card{border:1px solid var(--border); border-radius:var(--radius); padding:24px; background:var(--bg-elevated);}
+  .ach-icon{font-size:22px; margin-bottom:12px;}
+  .ach-card h4{font-size:16px; margin-bottom:8px; font-family:'Space Grotesk',sans-serif;}
+  .ach-card p{color:var(--text-secondary); font-size:14px;}
+
+  .contact-box{
+    text-align:center; padding:70px 40px; border-radius:16px;
+    background:radial-gradient(ellipse at 50% 0%, rgba(76,201,192,0.08), transparent 60%), var(--bg-elevated);
+    border:1px solid var(--border);
+  }
+  .contact-box h2{font-size:clamp(26px,4vw,38px); margin-bottom:14px;}
+  .contact-box p{color:var(--text-secondary); max-width:480px; margin:0 auto 30px;}
+  .contact-links{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+
+  footer{padding:36px 0; text-align:center; color:var(--text-secondary); font-size:13px; border-top:1px solid var(--border);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    #hero-canvas{display:none;}
+    .btn:hover, .project-card:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span> Harshad Vele</div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="wrap">
+    <div class="hero-content">
+      <div class="eyebrow">AVAILABLE FOR NEW OPPORTUNITIES</div>
+      <h1>Harshad Vele</h1>
+      <div class="role">Senior Java Backend Developer</div>
+      <p>I design and ship production-grade microservices for banking and enterprise
+      platforms — Spring Boot, Kafka, Redis — with 4.5+ years turning complex domain
+      problems into systems that hold up at scale.</p>
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="resume.pdf" download class="btn btn-ghost">Download Resume</a>
+      </div>
+      <div class="social-row">
+        <a href="https://linkedin.com/in/harshad-vele" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="mailto:harshadvele538@gmail.com">Email ↗</a>
+        <a href="tel:+918237172969">+91 82371 72969</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <span class="section-label">About</span>
+    <h2 class="section-title">Backend systems, built to last.</h2>
+    <div class="about-grid">
+      <div>
+        <p>I'm a backend engineer who enjoys turning complex domain problems — banking
+        workflows, asset management, high-volume data pipelines — into clean, scalable
+        services. Over the last <strong>4.5+ years</strong> I've worked across the full
+        lifecycle: architecture, implementation, mentoring, and direct client engagement,
+        mostly in the <strong>Java / Spring</strong> ecosystem.</p>
+        <p>Lately I've also been integrating AI coding assistants like <strong>Claude Code</strong>
+        into my daily workflow — using prompt engineering to accelerate delivery without
+        cutting corners on quality.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>Mumbai, India</b>Based in</div>
+        <div class="fact"><b>4.5+ Years</b>Backend engineering experience</div>
+        <div class="fact"><b>B.E., DBATU Lonere</b>Education</div>
+        <div class="fact"><b>Rising Star Award '24</b>Apptware Solutions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <span class="section-label">Experience</span>
+    <h2 class="section-title">Where I've built things.</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-role">Backend Developer — Java</div>
+        <div class="tl-meta">Apptware Solutions, Pune · Oct 2024 – Present</div>
+        <ul>
+          <li>Architected a microservices-based banking platform (Finedge) spanning 6+ domain modules — Admin, Banking, Customer, Loan, Deposit, Placement — on Java 21 and Spring Boot 3.4.x.</li>
+          <li>Implemented multi-layer caching (Redis + Caffeine) via Feign Client inter-service communication, significantly reducing API latency on high-traffic endpoints.</li>
+          <li>Built an RC-VAHAN data pipeline for Bajaj Finance, integrating REST APIs and Apache Kafka to parse, validate, and stream vehicle registration data at enterprise scale.</li>
+          <li>Mentored junior developers and led technical interviews.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Java 21</span><span class="tag">Spring Boot 3.4</span><span class="tag">Kafka</span><span class="tag">Redis</span><span class="tag">Feign</span>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-role">Software Developer — Java</div>
+        <div class="tl-meta">Accenture Solutions Pvt. Ltd., Mumbai · Oct 2021 – Sep 2024</div>
+        <ul>
+          <li>Led backend development for an Enterprise Asset Management (EAM) platform for a power-plant client, covering Transmission & Distribution, Generation, Renewable, and Thermal categories.</li>
+          <li>Built RESTful Spring Boot services integrated with IBM Maximo and Oracle DB.</li>
+          <li>Designed and optimized complex PL/SQL stored procedures for high-volume maintenance and asset records.</li>
+          <li>Engaged directly with clients on requirements, sprint reviews, and status updates over a 3-year tenure.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Oracle DB</span><span class="tag">PL/SQL</span><span class="tag">IBM Maximo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <span class="section-label">Featured Work</span>
+    <h2 class="section-title">Systems I've architected.</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-num">Banking Platform</div>
+        <h3>Finedge — Microservices Banking Platform</h3>
+        <div class="block"><b>Problem</b><span>A financial services client needed a modular platform for banking, loans, deposits, and placements — without a monolith bottleneck.</span></div>
+        <div class="block"><b>Approach</b><span>Architected 6+ independent domain modules on Java 21 / Spring Boot 3.4, using Feign Client for inter-service calls and Redis + Caffeine for multi-layer caching.</span></div>
+        <div class="block"><b>Result</b><span>Significantly reduced API latency on high-traffic endpoints; enabled scalable financial operations across modules.</span></div>
+        <div class="tag-row"><span class="tag">Java 21</span><span class="tag">Spring Boot</span><span class="tag">Redis</span></div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">Data Pipeline</div>
+        <h3>RC-VAHAN Pipeline — Bajaj Finance</h3>
+        <div class="block"><b>Problem</b><span>Vehicle registration data needed reliable ingestion, validation, and streaming at enterprise scale from third-party sources.</span></div>
+        <div class="block"><b>Approach</b><span>Built a pipeline integrating third-party REST APIs with Apache Kafka for real-time parsing, validation, and streaming.</span></div>
+        <div class="block"><b>Result</b><span>Reliable, scalable ingestion pipeline supporting enterprise-scale vehicle registration workflows.</span></div>
+        <div class="tag-row"><span class="tag">Kafka</span><span class="tag">REST</span><span class="tag">Java</span></div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">Enterprise Platform</div>
+        <h3>Enterprise Asset Management (EAM)</h3>
+        <div class="block"><b>Problem</b><span>A power-plant client needed unified asset data — across Transmission, Generation, Renewable, and Thermal — accessible and reportable across departments.</span></div>
+        <div class="block"><b>Approach</b><span>Built RESTful Spring Boot services integrated with IBM Maximo and Oracle DB; optimized PL/SQL stored procedures for high-volume records.</span></div>
+        <div class="block"><b>Result</b><span>Improved cross-department data accessibility and measurable query performance gains.</span></div>
+        <div class="tag-row"><span class="tag">Oracle DB</span><span class="tag">PL/SQL</span><span class="tag">Maximo</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <span class="section-label">Skills</span>
+    <h2 class="section-title">Tools of the trade.</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Languages & Core</h4>
+        <div class="chip-row">
+          <span class="chip">Java 17–25</span><span class="chip">SQL</span><span class="chip">PL/SQL</span><span class="chip">HTML/CSS</span><span class="chip">JSON/XML</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Frameworks</h4>
+        <div class="chip-row">
+          <span class="chip">Spring Boot</span><span class="chip">Spring MVC</span><span class="chip">Spring Data JPA</span><span class="chip">Hibernate</span><span class="chip">Vaadin</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Microservices & API</h4>
+        <div class="chip-row">
+          <span class="chip">REST</span><span class="chip">GraphQL</span><span class="chip">Feign Client</span><span class="chip">Kafka</span><span class="chip">OAuth</span><span class="chip">Keycloak</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Databases & Cache</h4>
+        <div class="chip-row">
+          <span class="chip">Oracle DB</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span><span class="chip">Redis</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Cloud & DevOps</h4>
+        <div class="chip-row">
+          <span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">Terraform</span><span class="chip">Jenkins</span><span class="chip">GitLab CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Testing & Tools</h4>
+        <div class="chip-row">
+          <span class="chip">JUnit</span><span class="chip">Mockito</span><span class="chip">TDD</span><span class="chip">JMeter</span><span class="chip">Maven</span><span class="chip">Postman</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <span class="section-label">Achievements</span>
+    <h2 class="section-title">Recognition along the way.</h2>
+    <div class="ach-grid">
+      <div class="ach-card">
+        <div class="ach-icon">🏆</div>
+        <h4>Rising Star Award — 2024</h4>
+        <p>Apptware Solutions. Recognised for exceptional technical delivery and fast impact in first year.</p>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">🥇</div>
+        <h4>Best Team Award</h4>
+        <p>Apptware Solutions. Delivered projects on time with high quality as a core team contributor.</p>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">🎤</div>
+        <h4>Organiser, CodeCraft Hackathon</h4>
+        <p>Planned and executed a company-wide hackathon promoting technical innovation and collaboration.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>Let's build something together.</h2>
+      <p>I'm open to new opportunities and interesting backend/platform problems. I usually reply within a day.</p>
+      <div class="contact-links">
+        <a href="mailto:harshadvele538@gmail.com" class="btn btn-primary">Email Me</a>
+        <a href="https://linkedin.com/in/harshad-vele" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+        <a href="resume.pdf" download class="btn btn-ghost">Download Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Harshad Vele. Built with three.js.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var canvas = document.getElementById('hero-canvas');
+  var hero = document.querySelector('.hero');
+  if(!canvas || typeof THREE === 'undefined') return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion) return;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, hero.clientWidth/hero.clientHeight, 0.1, 1000);
+  camera.position.set(0,0,32);
+
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(hero.clientWidth, hero.clientHeight);
+
+  var group = new THREE.Group();
+  scene.add(group);
+
+  var isMobile = window.innerWidth < 700;
+  var NODE_COUNT = isMobile ? 16 : 30;
+  var nodes = [];
+  var nodeGeo = new THREE.SphereGeometry(0.35, 12, 12);
+  var nodeMatTeal = new THREE.MeshBasicMaterial({color:0x4CC9C0});
+  var nodeMatAmber = new THREE.MeshBasicMaterial({color:0xE8A33D});
+
+  for(var i=0;i<NODE_COUNT;i++){
+    var mat = Math.random() > 0.8 ? nodeMatAmber : nodeMatTeal;
+    var mesh = new THREE.Mesh(nodeGeo, mat);
+    var radius = 14;
+    var theta = Math.random()*Math.PI*2;
+    var phi = Math.acos((Math.random()*2)-1);
+    mesh.position.set(
+      radius * Math.sin(phi) * Math.cos(theta) * (0.5+Math.random()*0.5),
+      radius * Math.sin(phi) * Math.sin(theta) * (0.5+Math.random()*0.5),
+      radius * Math.cos(phi) * (0.5+Math.random()*0.5)
+    );
+    group.add(mesh);
+    nodes.push(mesh);
+  }
+
+  var lineMat = new THREE.LineBasicMaterial({color:0x2c6e68, transparent:true, opacity:0.35});
+  var pulseLines = [];
+  for(var i=0;i<nodes.length;i++){
+    for(var j=i+1;j<nodes.length;j++){
+      var d = nodes[i].position.distanceTo(nodes[j].position);
+      if(d < 11 && Math.random() > 0.55){
+        var geo = new THREE.BufferGeometry().setFromPoints([nodes[i].position, nodes[j].position]);
+        var line = new THREE.Line(geo, lineMat.clone());
+        group.add(line);
+        pulseLines.push({line:line, phase:Math.random()*Math.PI*2});
+      }
+    }
+  }
+
+  var mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', function(e){
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  function onResize(){
+    camera.aspect = hero.clientWidth/hero.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(hero.clientWidth, hero.clientHeight);
+  }
+  window.addEventListener('resize', onResize);
+
+  var clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+    group.rotation.y = t * 0.06 + mouseX * 0.3;
+    group.rotation.x = mouseY * 0.15;
+
+    pulseLines.forEach(function(pl){
+      var pulse = (Math.sin(t*1.2 + pl.phase) + 1) / 2;
+      pl.line.material.opacity = 0.15 + pulse * 0.45;
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+(function(){
+  var cards = document.querySelectorAll('.project-card');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion) return;
+  cards.forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var rect = card.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = 'rotateY(' + (x*8) + 'deg) rotateX(' + (-y*8) + 'deg) translateZ(10px)';
+    });
+    card.addEventListener('mouseleave', function(){
+      card.style.transform = 'rotateY(0) rotateX(0) translateZ(0)';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -478,9 +478,14 @@
   if(!illustration || !bandGroup || !figure || !packet || !popup) return;
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var MAX_STRETCH = 196;
+  var BAND_WIDTH = 140;
   var VIEWBOX_WIDTH = 320;
   var REVEAL_THRESHOLD = 0.92;
+
+  var maxStretch = 196;
+  function computeMaxStretch(){
+    return window.innerWidth <= 480 ? 60 : (window.innerWidth <= 900 ? 90 : 196);
+  }
 
   var dragging = false;
   var startClientX = 0;
@@ -491,9 +496,9 @@
 
   function applyStretch(t){
     currentT = t;
-    var scaleX = 1 + t * 1.35;
+    var scaleX = 1 + t * (maxStretch / BAND_WIDTH);
     bandGroup.style.transform = 'scaleX(' + scaleX + ')';
-    figure.style.transform = 'translateX(' + (t * MAX_STRETCH) + 'px)';
+    figure.style.transform = 'translateX(' + (t * maxStretch) + 'px)';
 
     var shouldReveal = t >= REVEAL_THRESHOLD;
     if(shouldReveal && !revealed){
@@ -512,10 +517,11 @@
 
   function onPointerDown(e){
     dragging = true;
+    maxStretch = computeMaxStretch();
     illustration.classList.add('dragging');
     bandGroup.style.transition = 'none';
     figure.style.transition = 'none';
-    startClientX = pointFromEvent(e) - currentT * MAX_STRETCH;
+    startClientX = pointFromEvent(e) - currentT * maxStretch;
     if(illustration.setPointerCapture){
       try{ illustration.setPointerCapture(e.pointerId); }catch(err){}
     }
@@ -525,7 +531,7 @@
   function onPointerMove(e){
     if(!dragging) return;
     var delta = pointFromEvent(e) - startClientX;
-    applyStretch(clamp(delta / MAX_STRETCH, 0, 1));
+    applyStretch(clamp(delta / maxStretch, 0, 1));
   }
 
   function onPointerUp(){
@@ -540,7 +546,7 @@
     applyStretch(0);
 
     if(releasedT > 0.12 && !reduceMotion){
-      var startX = releasedT * MAX_STRETCH;
+      var startX = releasedT * maxStretch;
       packet.style.transition = 'none';
       packet.style.transform = 'translateX(' + startX + 'px)';
       packet.style.opacity = '1';

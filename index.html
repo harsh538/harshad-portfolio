@@ -52,6 +52,22 @@
   .navlinks{display:flex; gap:32px; font-size:14px; color:var(--text-secondary);}
   .navlinks a:hover{color:var(--accent-teal);}
   @media(max-width:640px){.navlinks{display:none;}}
+  .nav-right{display:flex; align-items:center; gap:28px;}
+  .sound-toggle{
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+    padding:7px 12px; border-radius:99px; font:500 12px 'JetBrains Mono',monospace;
+    color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--border);
+    transition:color .15s ease, border-color .15s ease, box-shadow .2s ease;
+  }
+  .sound-toggle:hover{color:var(--accent-teal); border-color:rgba(76,201,192,0.4);}
+  .sound-toggle[aria-pressed="true"]{color:var(--accent-teal); border-color:rgba(76,201,192,0.45); box-shadow:0 0 16px rgba(76,201,192,0.18);}
+  .eq{display:inline-flex; align-items:flex-end; gap:2px; height:12px;}
+  .eq i{width:2px; height:3px; border-radius:1px; background:currentColor; transition:height .2s ease;}
+  .sound-toggle[aria-pressed="true"] .eq i{animation:eq 1s ease-in-out infinite;}
+  .sound-toggle[aria-pressed="true"] .eq i:nth-child(2){animation-delay:-.4s;}
+  .sound-toggle[aria-pressed="true"] .eq i:nth-child(3){animation-delay:-.7s;}
+  .sound-toggle[aria-pressed="true"] .eq i:nth-child(4){animation-delay:-.2s;}
+  @keyframes eq{0%,100%{height:3px;} 50%{height:12px;}}
 
   .hero{
     position:relative; min-height:100vh; display:flex; align-items:center;
@@ -321,7 +337,7 @@
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     .btn:hover, .project-card:hover, .skill-group:hover, .ach-card:hover{transform:none;}
-    .blob, .portrait-ring, .portrait-glow, .marquee-track, .caret, .status-dot::after{animation:none;}
+    .blob, .portrait-ring, .portrait-glow, .marquee-track, .caret, .status-dot::after, .sound-toggle .eq i{animation:none !important;}
   }
 </style>
 </head>
@@ -330,15 +346,23 @@
 <nav>
   <div class="wrap">
     <div class="logo"><span class="dot"></span> Harshad Vele</div>
-    <div class="navlinks">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact">Contact</a>
+    <div class="nav-right">
+      <div class="navlinks">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Turn sound on">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="sound-label">Sound</span>
+      </button>
     </div>
   </div>
 </nav>
+
+<audio id="bg-audio" src="assets/bodhi-kalpak.mp3" loop preload="auto"></audio>
 
 <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -647,6 +671,66 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+// Background audio: browsers block sound until the visitor interacts, so we try
+// on load and otherwise start on the first click/tap/key press. The toggle's
+// choice is remembered per visitor.
+(function(){
+  var audio = document.getElementById('bg-audio');
+  var btn = document.querySelector('.sound-toggle');
+  if(!audio || !btn) return;
+  var TARGET_VOLUME = 0.35;
+  var KEY = 'hv-sound';
+  var wantOn = true;
+  try{ wantOn = localStorage.getItem(KEY) !== 'off'; }catch(e){}
+  var fadeTimer = null;
+
+  function setUi(on){
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on');
+  }
+  function fadeTo(target, done){
+    clearInterval(fadeTimer);
+    fadeTimer = setInterval(function(){
+      var v = audio.volume + (target > audio.volume ? 0.02 : -0.03);
+      if((target > audio.volume && v >= target) || (target <= audio.volume && v <= target)){
+        audio.volume = target; clearInterval(fadeTimer); if(done) done(); return;
+      }
+      audio.volume = Math.max(0, Math.min(1, v));
+    }, 40);
+  }
+  function start(){
+    audio.volume = 0;
+    var p = audio.play();
+    if(p && p.then){
+      p.then(function(){ setUi(true); fadeTo(TARGET_VOLUME); }).catch(function(){ setUi(false); });
+    } else { setUi(true); fadeTo(TARGET_VOLUME); }
+  }
+  function stop(){
+    setUi(false);
+    fadeTo(0, function(){ audio.pause(); });
+  }
+  function save(on){ try{ localStorage.setItem(KEY, on ? 'on' : 'off'); }catch(e){} }
+
+  btn.addEventListener('click', function(){
+    var on = btn.getAttribute('aria-pressed') !== 'true';
+    save(on);
+    wantOn = on;
+    if(on) start(); else stop();
+  });
+
+  if(!wantOn){ setUi(false); return; }
+  start();
+  function firstInteraction(e){
+    if(btn.contains(e.target)) return cleanup();
+    if(wantOn && audio.paused) start();
+    cleanup();
+  }
+  function cleanup(){
+    ['pointerdown','keydown','touchstart'].forEach(function(t){ document.removeEventListener(t, firstInteraction, true); });
+  }
+  ['pointerdown','keydown','touchstart'].forEach(function(t){ document.addEventListener(t, firstInteraction, true); });
+})();
+
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasGsap = !!(window.gsap && window.ScrollTrigger);
